@@ -1,6 +1,5 @@
-sushi, 10.0, Food
-lamp, 15.0, Home
-gas, 70.0, Work
-clothes, 50.0, Fun
-cups, 4.0, Home
-grapes, 6.0, Food
+plant, 15.0, 🏡 Home
+gas, 70.0, 💼 Work
+bread, 5.0, 🍳 Food
+juice, 8.0, 🍳 Food
+streamers, 5.0, 🍾 Fun

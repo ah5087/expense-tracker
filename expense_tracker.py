@@ -20,10 +20,10 @@ def main():
 
 def get_user_expense():
     print(f"Get user expense!")
-    expense_name = input("Enter expense name: ")
-    expense_amount = float(input("Enter expense amount: "))
+    expense_name = input(blue("Enter expense name: "))
+    expense_amount = float(input(blue("Enter expense amount: ")))
     expense_categories = [
-        "Food", "Home", "Work", "Fun", "Misc"
+        "🍳 Food", "🏡 Home", "💼 Work", "🍾 Fun", "🪴 Misc"
     ]
 
     while True:
@@ -33,7 +33,7 @@ def get_user_expense():
 
         value_range = f"[1 - {len(expense_categories)}]"
         selected_index = int(
-            input(f"Enter category number {value_range}: ")) - 1
+            input(blue(f"Enter category number {value_range}: "))) - 1
 
         if selected_index in range(len(expense_categories)):
             selected_category = expense_categories[selected_index]
@@ -45,7 +45,6 @@ def get_user_expense():
 
 
 def save_expense_to_file(expense: Expense, expense_file_path):
-    print(f"Save expense: {expense}")
     with open(expense_file_path, "a") as f:
         f.write(f"{expense.name}, {expense.amount}, {expense.category}\n")
 
@@ -75,10 +74,10 @@ def summarize_expenses(expense_file_path, budget):
         print(f" {key}: ${amount:.2f}")
 
     total_spent = sum([ex.amount for ex in expenses])
-    print(f"Total Spent: ${total_spent:.2f}")
+    print(green(f"Total Spent: ${total_spent:.2f}"))
 
     remaining_budget = budget - total_spent
-    print(f"Budget Remaining: ${remaining_budget:.2f}")
+    print(green(f"Budget Remaining: ${remaining_budget:.2f}"))
 
     # get current date
     now = datetime.datetime.now()
@@ -95,6 +94,10 @@ def summarize_expenses(expense_file_path, budget):
 
 def green(text):
     return f"\033[92m{text}\033[0m"
+
+
+def blue(text):
+    return f"\033[94m{text}\033[0m"
 
 
 if __name__ == "__main__":  # only true when run directly, not imported
