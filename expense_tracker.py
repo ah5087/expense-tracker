@@ -1,4 +1,5 @@
 from expense import Expense
+from collections import defaultdict
 import calendar
 import datetime
 
@@ -23,7 +24,7 @@ def get_user_expense():
     expense_name = input(blue("Enter expense name: "))
     expense_amount = float(input(blue("Enter expense amount: ")))
     expense_categories = [
-        "🍳 Food", "🏡 Home", "💼 Work", "🍾 Fun", "🪴 Misc"
+        " 🍳 Food", " 🏡 Home", " 💼 Work", " 🍾 Fun", " 🪴 Misc"
     ]
 
     while True:
@@ -49,47 +50,21 @@ def save_expense_to_file(expense: Expense, expense_file_path):
         f.write(f"{expense.name}, {expense.amount}, {expense.category}\n")
 
 
-def summarize_expenses(expense_file_path, budget):
-    print(f"Summarize expenses!")
-    expenses: list[Expense] = []
-    with open(expense_file_path, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            expense_name, expense_amount, expense_category = line.strip().split(
-                ",")
-            line_expense = Expense(
-                name=expense_name, amount=float(expense_amount), category=expense_category)
-            expenses.append(line_expense)
+def summarize_expenses(file_path, budget):
+    total_expenses = 0
+    expenses_by_category = defaultdict(float)
 
-    amount_by_category = {}
-    for expense in expenses:
-        key = expense.category
-        if key in amount_by_category:
-            amount_by_category[key] += expense.amount
-        else:
-            amount_by_category[key] = expense.amount
+    with open(file_path, 'r') as file:
+        for line in file:
+            name, amount, category = line.strip().split(',')
+            amount = float(amount)
+            total_expenses += amount
+            expenses_by_category[category] += amount
 
-    print("Expenses By Category: ")
-    for key, amount in amount_by_category.items():
-        print(f" {key}: ${amount:.2f}")
-
-    total_spent = sum([ex.amount for ex in expenses])
-    print(green(f"Total Spent: ${total_spent:.2f}"))
-
-    remaining_budget = budget - total_spent
-    print(green(f"Budget Remaining: ${remaining_budget:.2f}"))
-
-    # get current date
-    now = datetime.datetime.now()
-
-    # number of days in current month
-    days_in_month = calendar.monthrange(now.year, now.month)[1]
-
-    # calculate number of remaining days in current month
-    remaining_days = days_in_month - now.day
-
-    daily_budget = remaining_budget / remaining_days
-    print(green(f"Budget Per Day: ${daily_budget:.2f}"))
+    return {
+        'total_expenses': total_expenses,
+        'expenses_by_category': dict(expenses_by_category)
+    }
 
 
 def green(text):
